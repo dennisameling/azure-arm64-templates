@@ -4,7 +4,7 @@ param (
     [Parameter(Mandatory=$true)]
     [string]$GitHubActionsRunnerToken,
 
-    # GitHub Actions Runner repository. E.g. "https://github.com/MY_ORG" (org-level) or "https://github.com/MY_ORG/MY_REPO" or (repo-level_
+    # GitHub Actions Runner repository. E.g. "https://github.com/MY_ORG" (org-level) or "https://github.com/MY_ORG/MY_REPO" (repo-level)
     # https://docs.github.com/en/actions/hosting-your-own-runners/adding-self-hosted-runners
     [Parameter(Mandatory=$true)]
     [string]$GitHubActionsRunnerRepo

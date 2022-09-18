@@ -260,12 +260,12 @@
                         "value": "[parameters('location')]"
                     },
                     "arguments": {
-                        "value": "[concat ('-GitHubActionsRunnerToken ', parameters('githubActionsRunnerToken'), ' -GitHubActionsRunnerRepo ', parameters('githubActionsRunnerRepo'))]"
+                        "value": "[concat('-GitHubActionsRunnerToken ', parameters('githubActionsRunnerToken'), ' -GitHubActionsRunnerRepo ', parameters('githubActionsRunnerRepo'))]"
                     }
                 }
             },
             "dependsOn": [
-                "[concat('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName1'))]"
+                "[resourceId('Microsoft.Compute/virtualMachines/', parameters('virtualMachineName1'))]"
             ]
         }
     ],

@@ -99,4 +99,10 @@ Write-Output "Installing GitHub Actions runner ${GitHubActionsRunnerVersion} as 
 Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip", $GitHubActionsRunnerPath)
 cmd.exe /c "${GitHubActionsRunnerPath}\config.cmd" --unattended --runasservice --labels ${GithubActionsRunnerLabels} --url ${GitHubActionsRunnerRepo} --token ${GitHubActionsRunnerToken}
 
+# Ensure that the service was created. If not, exit with error code.
+$MatchedServices = Get-Service -Name "actions.runner.*"
+if ($MatchedServices.count -eq 0) {
+    Write-Error "GitHub Actions service not found (should start with actions.runner). Check the logs in ${GitHubActionsRunnerPath}\_diag for more details."
+    exit 1
+}
 Write-Output "Finished installing GitHub Actions runner."

@@ -260,7 +260,7 @@
                         "value": "[parameters('location')]"
                     },
                     "arguments": {
-                        "value": "-GitHubActionsRunnerToken [parameters('githubActionsRunnerToken')] -GitHubActionsRunnerRepo [parameters('githubActionsRunnerRepo')]"
+                        "value": "[concat ('-GitHubActionsRunnerToken ', parameters('githubActionsRunnerToken'), ' -GitHubActionsRunnerRepo ', parameters('githubActionsRunnerRepo'))]"
                     }
                 }
             },

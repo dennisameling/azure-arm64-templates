@@ -97,6 +97,7 @@ if((Get-FileHash -Path ${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHu
 Write-Output "Installing GitHub Actions runner ${GitHubActionsRunnerVersion} as a Windows service with labels ${GithubActionsRunnerLabels}..."
 
 Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip", $GitHubActionsRunnerPath)
-cmd.exe /c "${GitHubActionsRunnerPath}/config.cmd" --unattended --runasservice --labels ${GithubActionsRunnerLabels} --url ${GitHubActionsRunnerRepo} --token ${GitHubActionsRunnerToken}
+Set-Location $GitHubActionsRunnerPath
+cmd.exe /c ".\config.cmd" --unattended --runasservice --labels ${GithubActionsRunnerLabels} --url ${GitHubActionsRunnerRepo} --token ${GitHubActionsRunnerToken}
 
 Write-Output "Finished installing GitHub Actions runner."

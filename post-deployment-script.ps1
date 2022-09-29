@@ -18,8 +18,9 @@ Write-Output "Starting post-deployment script."
 
 $GitForWindowsVersion = "2.37.3"
 # Note that the GitHub Actions Runner auto-updates itself by default, but do try to reference a relatively new version here.
-$GitHubActionsRunnerVersion = "2.296.2"
-$GithubActionsRunnerHash = "96d03cf54dbfe2e016bd2aa5a08ffbd2a803b1899b0ae3eedf4bd18e370f14a4"
+$GitHubActionsRunnerVersion = "2.297.0"
+$GithubActionsRunnerArch = "arm64"
+$GithubActionsRunnerHash = "ed247416961aae56343a833cdfec050d5473c207f23026897df6b68f8ba9579f"
 $GithubActionsRunnerLabels = "self-hosted,Windows,ARM64"
 # Keep this path short to prevent Long Path issues
 $GitHubActionsRunnerPath = "C:\actions-runner"
@@ -90,13 +91,13 @@ Write-Output "Downloading GitHub Actions runner..."
 
 mkdir $GitHubActionsRunnerPath | Out-Null
 $ProgressPreference = 'SilentlyContinue'
-Invoke-WebRequest -UseBasicParsing -Uri https://github.com/actions/runner/releases/download/v${GitHubActionsRunnerVersion}/actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip -OutFile ${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip
+Invoke-WebRequest -UseBasicParsing -Uri https://github.com/actions/runner/releases/download/v${GitHubActionsRunnerVersion}/actions-runner-win-${GithubActionsRunnerArch}-${GitHubActionsRunnerVersion}.zip -OutFile ${GitHubActionsRunnerPath}\actions-runner-win-${GithubActionsRunnerArch}-${GitHubActionsRunnerVersion}.zip
 $ProgressPreference = 'Continue'
-if((Get-FileHash -Path ${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip -Algorithm SHA256).Hash.ToUpper() -ne $GithubActionsRunnerHash.ToUpper()){ throw 'Computed checksum did not match' }
+if((Get-FileHash -Path ${GitHubActionsRunnerPath}\actions-runner-win-${GithubActionsRunnerArch}-${GitHubActionsRunnerVersion}.zip -Algorithm SHA256).Hash.ToUpper() -ne $GithubActionsRunnerHash.ToUpper()){ throw 'Computed checksum did not match' }
 
 Write-Output "Installing GitHub Actions runner ${GitHubActionsRunnerVersion} as a Windows service with labels ${GithubActionsRunnerLabels}..."
 
-Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("${GitHubActionsRunnerPath}\actions-runner-win-x64-${GitHubActionsRunnerVersion}.zip", $GitHubActionsRunnerPath)
+Add-Type -AssemblyName System.IO.Compression.FileSystem ; [System.IO.Compression.ZipFile]::ExtractToDirectory("${GitHubActionsRunnerPath}\actions-runner-win-${GithubActionsRunnerArch}-${GitHubActionsRunnerVersion}.zip", $GitHubActionsRunnerPath)
 cmd.exe /c "${GitHubActionsRunnerPath}\config.cmd" --unattended --runasservice --labels ${GithubActionsRunnerLabels} --url ${GitHubActionsRunnerRepo} --token ${GitHubActionsRunnerToken}
 
 # Ensure that the service was created. If not, exit with error code.

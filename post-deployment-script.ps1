@@ -17,6 +17,8 @@ Write-Output "Starting post-deployment script."
 # =================================
 
 $GitForWindowsVersion = "2.37.3"
+$GitForWindowsTag = "2.37.3.windows.1"
+$GitForWindowsHash = "b0442f1b8ea40b6f94ef9a611121d2c204f6aa7f29c54315d2ce59876c3d134e"
 # Note that the GitHub Actions Runner auto-updates itself by default, but do try to reference a relatively new version here.
 $GitHubActionsRunnerVersion = "2.297.0"
 $GithubActionsRunnerArch = "arm64"
@@ -49,8 +51,10 @@ Write-Output "Finished adding Microsoft Defender Exclusions."
 Write-Output "Downloading Git for Windows..."
 $GitForWindowsOutputFile = "./git-for-windows-installer.exe"
 $ProgressPreference = 'SilentlyContinue'
-Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/git-for-windows/git/releases/download/v${GitForWindowsVersion}.windows.1/Git-${GitForWindowsVersion}-64-bit.exe" -OutFile $GitForWindowsOutputFile
+Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/git-for-windows/git/releases/download/v${GitForWindowsTag}/Git-${GitForWindowsVersion}-64-bit.exe" -OutFile $GitForWindowsOutputFile
 $ProgressPreference = 'Continue'
+
+if((Get-FileHash -Path $GitForWindowsOutputFile -Algorithm SHA256).Hash.ToUpper() -ne $GitForWindowsHash.ToUpper()){ throw 'Computed checksum did not match' }
 
 Write-Output "Installing Git for Windows..."
 @"
